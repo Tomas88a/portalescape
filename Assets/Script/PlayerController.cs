@@ -110,11 +110,28 @@ public class PlayerController : MonoBehaviour
 
     void HandleInteraction()
     {
+        // 鼠标左键拔钉子
+        if (Input.GetMouseButtonDown(0))
+        {
+            float pullDistance = 2f; // 钉子可拔出距离
+            Ray ray = mainCam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, pullDistance))
+            {
+                var nail = hit.collider.GetComponent<NailPullable>();
+                if (nail != null)
+                {
+                    nail.PullOnce();
+                    return; // 拔钉子和其它交互互斥
+                }
+            }
+        }
+
+        // E键拾取/放下物体
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (heldPickable != null)
             {
-                // 如果手上有物体，再按E直接放下
                 heldPickable.Drop();
                 heldPickable = null;
                 return;
@@ -134,9 +151,11 @@ public class PlayerController : MonoBehaviour
                     heldPickable = pickable;
                     return;
                 }
-
                 // ... 这里可以扩展其它交互
             }
         }
     }
+
+
+
 }
