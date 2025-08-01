@@ -17,6 +17,9 @@ public class NailPullable : MonoBehaviour
     [Header("目标计数钉子（会计数/开门/触发UI）")]
     public bool countAsGoalNail = true;  // 桥钉设false即可不计数
 
+    [Header("拔出后激活的Trigger（可选）")]
+    public GameObject triggerToActivate;   // ！！！新增：指定拔出后要激活的trigger
+
     [Header("音效&动画")]
     public AudioClip pullSound;          // 拔出时的音效（每次左键一下）
     public AudioClip dropSound;          // 钉子掉地时音效
@@ -58,6 +61,13 @@ public class NailPullable : MonoBehaviour
             if (countAsGoalNail && NailPullManager.Instance != null)
                 NailPullManager.Instance.AddNail();
 
+            // ！！！拔出后激活Trigger
+            if (triggerToActivate != null)
+            {
+                triggerToActivate.SetActive(true);
+                Debug.Log("拔出钉子后已激活Trigger: " + triggerToActivate.name);
+            }
+
             if (destroyOnPull)
             {
                 Destroy(gameObject, 0.5f); // 半秒后销毁
@@ -71,7 +81,6 @@ public class NailPullable : MonoBehaviour
     {
         if (isPulledOut && !destroyOnPull && !dropSoundPlayed)
         {
-            // 判断是不是地面（可加 Layer 检测优化）
             if (collision.gameObject.CompareTag("Ground") || collision.contacts[0].normal == Vector3.up)
             {
                 if (dropSound)
@@ -79,13 +88,11 @@ public class NailPullable : MonoBehaviour
 
                 dropSoundPlayed = true;
 
-                // 插地动画
                 if (animator && !string.IsNullOrEmpty(insertAnimName))
                 {
                     animator.Play(insertAnimName);
                 }
 
-                // 钉子彻底插地
                 if (rb != null) rb.isKinematic = true;
             }
         }

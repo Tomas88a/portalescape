@@ -3,25 +3,47 @@ using UnityEngine;
 public class FallingNail : MonoBehaviour
 {
     [Header("插地设置")]
-    public float minDropDistance = 2f; // 掉落多远后插地（可调）
-    public LayerMask groundMask;       // 指定地板layer（建议设置，防止插到奇怪物体）
-    public float raycastDownLength = 1f; // 插地对齐射线长度
+    public float minDropDistance = 2f;
+    public LayerMask groundMask;
+    public float raycastDownLength = 1f;
 
     [Header("插地角度调整")]
-    public Vector3 rotationOffset;     // Inspector可调，插地后朝向修正（单位：度）
+    public Vector3 rotationOffset;
 
     [Header("自定义掉落重力")]
     public bool useCustomGravity = false;
-    public Vector3 customGravity = new Vector3(0, -9.81f, 0); // 默认向下重力，可自定义
+    public Vector3 customGravity = new Vector3(0, -9.81f, 0);
+
+    [Header("高级选项")]
+    public bool ignorePlayerCollision = false; // 新增！仅勾选的钉子会忽略玩家
 
     private Vector3 startPos;
     private Rigidbody rb;
     private bool stuck = false;
 
+    // ↓ 用于多collider支持
+    private Collider[] playerColliders;
+    private Collider myCol;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         startPos = transform.position;
+        myCol = GetComponent<Collider>();
+
+        if (ignorePlayerCollision)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                playerColliders = player.GetComponentsInChildren<Collider>();
+                foreach (var pc in playerColliders)
+                {
+                    if (myCol != null && pc != null)
+                        Physics.IgnoreCollision(myCol, pc, true);
+                }
+            }
+        }
     }
 
     void FixedUpdate()
@@ -36,23 +58,30 @@ public class FallingNail : MonoBehaviour
     {
         if (stuck || rb.isKinematic) return;
 
-        // 距离足够大才插地
         float dropDist = Vector3.Distance(transform.position, startPos);
         if (dropDist >= minDropDistance)
         {
-            // 检测是不是快落到地面
-            Ray ray = new Ray(transform.position, customGravity.normalized * -1); // 朝重力反方向射线
+            Ray ray = new Ray(transform.position, customGravity.normalized * -1);
             if (Physics.Raycast(ray, out RaycastHit hit, raycastDownLength, groundMask))
             {
                 rb.isKinematic = true;
                 rb.velocity = Vector3.zero;
 
-                // 2. 对齐地面法线（这里可按自定义掉落方向修正）
                 transform.position = hit.point;
                 transform.up = hit.normal;
                 transform.Rotate(rotationOffset, Space.Self);
 
                 stuck = true;
+
+                // ★ 如果你想插地后恢复与player的碰撞，可在此取消 IgnoreCollision
+                // if (ignorePlayerCollision && playerColliders != null)
+                // {
+                //     foreach (var pc in playerColliders)
+                //     {
+                //         if (myCol != null && pc != null)
+                //             Physics.IgnoreCollision(myCol, pc, false);
+                //     }
+                // }
             }
         }
     }

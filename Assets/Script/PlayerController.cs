@@ -12,7 +12,11 @@ public class PlayerController : MonoBehaviour
     public float mouseSensitivity = 2f;
 
     [Header("Hand")]
-    public Transform handTransform; // Inspector指定Hand（建议为Player子物体，放在摄像机前）
+    public Transform handTransform;
+
+    [Header("初始重力&朝向")]
+    public Vector3 initialGravity = new Vector3(0, -9.81f, 0);
+    public Vector3 initialEulerAngles = Vector3.zero;
 
     private CharacterController controller;
     private Camera mainCam;
@@ -24,7 +28,8 @@ public class PlayerController : MonoBehaviour
     private float jumpTimeout = 0f;
     private const float jumpGroundingPreventTime = 0.15f;
 
-    // =============== 记录手上的物体 ===============
+    private float cameraRollOffset = 0f;
+
     private Pickable heldPickable = null;
 
     void Start()
@@ -33,6 +38,16 @@ public class PlayerController : MonoBehaviour
         mainCam = Camera.main;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        customGravity = initialGravity;
+
+        // 只改player水平方向（y轴）欧拉角
+        transform.eulerAngles = new Vector3(0, initialEulerAngles.y, 0);
+        xRotation = initialEulerAngles.x;
+        cameraRollOffset = initialEulerAngles.z;
+
+        if (mainCam != null)
+            mainCam.transform.localRotation = Quaternion.Euler(xRotation, 0f, cameraRollOffset);
     }
 
     void Update()
@@ -42,18 +57,26 @@ public class PlayerController : MonoBehaviour
         HandleInteraction();
     }
 
+    // ★★★ 关键部分：自适应重力的鼠标Look ★★★
     void HandleMouseLook()
     {
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
-        transform.Rotate(Vector3.up, mouseX, Space.Self);
 
+        // 水平旋转
+        Vector3 upAxis = -customGravity.normalized;
+        transform.Rotate(upAxis, mouseX, Space.World);
+
+        // 垂直pitch
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
         if (mainCam != null)
-            mainCam.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        {
+            mainCam.transform.localEulerAngles = new Vector3(xRotation, 0f, cameraRollOffset);
+        }
     }
+
 
     void HandleMovement()
     {
@@ -113,7 +136,7 @@ public class PlayerController : MonoBehaviour
         // 鼠标左键拔钉子
         if (Input.GetMouseButtonDown(0))
         {
-            float pullDistance = 2f; // 钉子可拔出距离
+            float pullDistance = 2f;
             Ray ray = mainCam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, pullDistance))
@@ -122,7 +145,7 @@ public class PlayerController : MonoBehaviour
                 if (nail != null)
                 {
                     nail.PullOnce();
-                    return; // 拔钉子和其它交互互斥
+                    return;
                 }
             }
         }
@@ -138,12 +161,11 @@ public class PlayerController : MonoBehaviour
             }
 
             float interactRange = 2f;
-            float pickRadius = 0.3f; // 半径可调
+            float pickRadius = 0.3f;
             Ray ray = new Ray(mainCam.transform.position, mainCam.transform.forward);
 
             if (Physics.SphereCast(ray, pickRadius, out RaycastHit hit, interactRange))
             {
-                // 优先拾取物品
                 var pickable = hit.collider.GetComponent<Pickable>();
                 if (pickable != null && !pickable.IsPicked())
                 {
@@ -151,11 +173,7 @@ public class PlayerController : MonoBehaviour
                     heldPickable = pickable;
                     return;
                 }
-                // ... 这里可以扩展其它交互
             }
         }
     }
-
-
-
 }

@@ -1906,6 +1906,7 @@ MonoBehaviour:
   rotationOffset: {x: 90, y: 0, z: 0}
   useCustomGravity: 0
   customGravity: {x: 0, y: -9.81, z: 0}
+  ignorePlayerCollision: 0
 --- !u!54 &229925592
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1953,6 +1954,7 @@ MonoBehaviour:
   coll: {fileID: 0}
   destroyOnPull: 0
   countAsGoalNail: 0
+  triggerToActivate: {fileID: 0}
   pullSound: {fileID: 0}
   dropSound: {fileID: 0}
   animator: {fileID: 0}
@@ -3680,6 +3682,7 @@ MonoBehaviour:
   coll: {fileID: 438865134}
   destroyOnPull: 1
   countAsGoalNail: 1
+  triggerToActivate: {fileID: 0}
   pullSound: {fileID: 0}
   dropSound: {fileID: 0}
   animator: {fileID: 0}
@@ -4803,6 +4806,8 @@ MonoBehaviour:
   customGravity: {x: 0, y: -9.81, z: 0}
   mouseSensitivity: 2
   handTransform: {fileID: 931333843}
+  initialGravity: {x: 0, y: -9.81, z: 0}
+  initialEulerAngles: {x: 0, y: 0, z: 0}
 --- !u!1 &609102995 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1768947436039628, guid: 1d46b704e2c5bc94b94f4b8528cc395b,
@@ -7743,6 +7748,7 @@ MonoBehaviour:
   rotationOffset: {x: 90, y: 0, z: 0}
   useCustomGravity: 1
   customGravity: {x: -50, y: 0, z: 0}
+  ignorePlayerCollision: 0
 --- !u!114 &1068693375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7763,6 +7769,7 @@ MonoBehaviour:
   coll: {fileID: 0}
   destroyOnPull: 0
   countAsGoalNail: 0
+  triggerToActivate: {fileID: 0}
   pullSound: {fileID: 0}
   dropSound: {fileID: 0}
   animator: {fileID: 0}
@@ -8911,7 +8918,7 @@ GameObject:
   - component: {fileID: 1313957476}
   - component: {fileID: 1313957472}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: PickupCube
   m_TagString: Pickable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11334,6 +11341,7 @@ MonoBehaviour:
   coll: {fileID: 1743182412}
   destroyOnPull: 1
   countAsGoalNail: 1
+  triggerToActivate: {fileID: 0}
   pullSound: {fileID: 0}
   dropSound: {fileID: 0}
   animator: {fileID: 0}
