@@ -10,6 +10,10 @@ public class FallingNail : MonoBehaviour
     [Header("插地角度调整")]
     public Vector3 rotationOffset;     // Inspector可调，插地后朝向修正（单位：度）
 
+    [Header("自定义掉落重力")]
+    public bool useCustomGravity = false;
+    public Vector3 customGravity = new Vector3(0, -9.81f, 0); // 默认向下重力，可自定义
+
     private Vector3 startPos;
     private Rigidbody rb;
     private bool stuck = false;
@@ -18,6 +22,14 @@ public class FallingNail : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         startPos = transform.position;
+    }
+
+    void FixedUpdate()
+    {
+        if (rb != null && !stuck && !rb.isKinematic && useCustomGravity)
+        {
+            rb.AddForce(customGravity, ForceMode.Acceleration);
+        }
     }
 
     void Update()
@@ -29,17 +41,15 @@ public class FallingNail : MonoBehaviour
         if (dropDist >= minDropDistance)
         {
             // 检测是不是快落到地面
-            Ray ray = new Ray(transform.position, Vector3.down);
+            Ray ray = new Ray(transform.position, customGravity.normalized * -1); // 朝重力反方向射线
             if (Physics.Raycast(ray, out RaycastHit hit, raycastDownLength, groundMask))
             {
-                // 1. 把rb锁住
                 rb.isKinematic = true;
                 rb.velocity = Vector3.zero;
-                // 2. 对齐地面法线
+
+                // 2. 对齐地面法线（这里可按自定义掉落方向修正）
                 transform.position = hit.point;
                 transform.up = hit.normal;
-
-                // 3. 叠加Inspector可调旋转（本地欧拉角偏移）
                 transform.Rotate(rotationOffset, Space.Self);
 
                 stuck = true;
