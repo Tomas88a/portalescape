@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     public float mouseSensitivity = 2f;
 
     [Header("Hand")]
-    public Transform handTransform; // 在Inspector指定你的Hand空物体（建议为Player子物体，放在摄像机前）
+    public Transform handTransform; // Inspector指定Hand（建议为Player子物体，放在摄像机前）
 
     private CharacterController controller;
     private Camera mainCam;
@@ -21,9 +21,11 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
     private bool wasGrounded;
 
-    // 新增变量
     private float jumpTimeout = 0f;
-    private const float jumpGroundingPreventTime = 0.15f; // 起跳后多长时间忽略地面检测
+    private const float jumpGroundingPreventTime = 0.15f;
+
+    // =============== 记录手上的物体 ===============
+    private Pickable heldPickable = null;
 
     void Start()
     {
@@ -57,7 +59,6 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 gravityDir = customGravity.normalized;
 
-        // 地面检测（双保险）
         bool controllerGrounded = controller.isGrounded;
         bool rayGrounded = false;
         float rayDist = controller.height / 2 + 0.3f;
@@ -67,7 +68,6 @@ public class PlayerController : MonoBehaviour
 
         bool realGrounded = controllerGrounded || rayGrounded;
 
-        // 跳跃冷却判定
         if (jumpTimeout > 0)
         {
             jumpTimeout -= Time.deltaTime;
@@ -78,7 +78,6 @@ public class PlayerController : MonoBehaviour
             isGrounded = realGrounded;
         }
 
-        // 跳跃和重力
         if (isGrounded)
         {
             if (!wasGrounded)
@@ -88,7 +87,7 @@ public class PlayerController : MonoBehaviour
             {
                 verticalVelocity = -gravityDir * jumpForce;
                 isGrounded = false;
-                jumpTimeout = jumpGroundingPreventTime; // 跳跃后N秒内忽略地面
+                jumpTimeout = jumpGroundingPreventTime;
             }
 
             controller.Move(gravityDir * 0.01f);
@@ -98,7 +97,6 @@ public class PlayerController : MonoBehaviour
             verticalVelocity += customGravity * Time.deltaTime;
         }
 
-        // 水平移动
         float inputX = Input.GetAxisRaw("Horizontal");
         float inputZ = Input.GetAxisRaw("Vertical");
         Vector3 move = (transform.right * inputX + transform.forward * inputZ);
@@ -114,21 +112,30 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            RaycastHit hit;
+            if (heldPickable != null)
+            {
+                // 如果手上有物体，再按E直接放下
+                heldPickable.Drop();
+                heldPickable = null;
+                return;
+            }
+
             float interactRange = 2f;
-            if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, interactRange))
+            float pickRadius = 0.3f; // 半径可调
+            Ray ray = new Ray(mainCam.transform.position, mainCam.transform.forward);
+
+            if (Physics.SphereCast(ray, pickRadius, out RaycastHit hit, interactRange))
             {
                 // 优先拾取物品
                 var pickable = hit.collider.GetComponent<Pickable>();
-                if (pickable != null)
+                if (pickable != null && !pickable.IsPicked())
                 {
                     pickable.PickUp(handTransform);
+                    heldPickable = pickable;
                     return;
                 }
 
-                // 其它交互
-                
-                // ...你可以继续扩展更多机关类型
+                // ... 这里可以扩展其它交互
             }
         }
     }

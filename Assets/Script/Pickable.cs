@@ -23,7 +23,6 @@ public class Pickable : MonoBehaviour
             Rigidbody rb = GetComponent<Rigidbody>();
             if (rb != null) rb.isKinematic = true;
 
-            // 关键：只有被拾取后才允许挥动
             var swing = GetComponent<HandItemSwing>();
             if (swing != null) swing.isHeld = true;
         }
@@ -34,4 +33,28 @@ public class Pickable : MonoBehaviour
 
         Debug.Log("你拾取了物品：" + name);
     }
+
+    public void Drop()
+    {
+        if (!isPicked) return;
+        isPicked = false;
+
+        // 解绑父物体
+        transform.SetParent(null);
+
+        // 恢复物理与碰撞体
+        Collider col = GetComponent<Collider>();
+        if (col != null) col.enabled = true;
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null) rb.isKinematic = false;
+
+        // 挥动功能禁用
+        var swing = GetComponent<HandItemSwing>();
+        if (swing != null) swing.isHeld = false;
+
+        Debug.Log("你丢下了物品：" + name);
+    }
+
+    // 可选：判断当前是否已被拾取
+    public bool IsPicked() => isPicked;
 }

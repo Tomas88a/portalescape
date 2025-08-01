@@ -27,4 +27,13 @@ public class DoorInteraction : MonoBehaviour
         else
             transform.rotation = Quaternion.Lerp(transform.rotation, closedRotation, Time.deltaTime * openSpeed);
     }
+    public void OpenDoor()
+    {
+        isOpen = true;
+    }
+    public void CloseDoor()
+    {
+        isOpen = false;
+    }
+
 }
