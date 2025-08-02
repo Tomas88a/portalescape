@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class NewBehaviourScript : MonoBehaviour
 {
-    public Transform rotateCenter; 
+    public Transform rotateCenter;
     public Vector3 gravityDirection = new Vector3(0, -1f, 0);
     public Transform body;
     public Rigidbody Playerbody;
+    public float jumpForce = 3.81f;
     [Header("移动设置")]
     public float moveSpeed = 5f;           // 移动速度
 
@@ -32,12 +33,19 @@ public class NewBehaviourScript : MonoBehaviour
         HandleMouseLook();
 
         gravityDirection = -rotateCenter.up;
-        body.rotation = rotateCenter.rotation;
+        body.rotation = rotateCenter.rotation; 
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.LogError("jump");
+            Playerbody.AddForce(-gravityDirection * 3.81f, ForceMode.Impulse);
+        }
     }
 
     void FixedUpdate()
     {
-        Playerbody.AddForce(gravityDirection * 9.81f,ForceMode.Acceleration);
+        Playerbody.AddForce(gravityDirection * 9.81f, ForceMode.Acceleration);
+
+
     }
 
     void HandleMovement()
