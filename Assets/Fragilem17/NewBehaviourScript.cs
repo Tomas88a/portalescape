@@ -34,8 +34,16 @@ public class NewBehaviourScript : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal"); // A/D 键
         float vertical = Input.GetAxis("Vertical");     // W/S 键
 
-        // 计算移动方向（基于物体的本地坐标系）
-        Vector3 direction = transform.right * horizontal + transform.forward * vertical;
+        // 计算水平移动方向（忽略垂直旋转，只使用Y轴旋转）
+        // 获取当前Y轴旋转角度
+        float yRotation = transform.eulerAngles.y;
+
+        // 基于Y轴旋转计算前进和右侧方向（保持在水平面）
+        Vector3 forward = new Vector3(Mathf.Sin(yRotation * Mathf.Deg2Rad), 0, Mathf.Cos(yRotation * Mathf.Deg2Rad));
+        Vector3 right = new Vector3(Mathf.Cos(yRotation * Mathf.Deg2Rad), 0, -Mathf.Sin(yRotation * Mathf.Deg2Rad));
+
+        // 计算移动方向（只在水平面移动）
+        Vector3 direction = right * horizontal + forward * vertical;
 
         // 应用移动
         transform.position += direction * moveSpeed * Time.deltaTime;
