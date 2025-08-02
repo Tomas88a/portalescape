@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class NewBehaviourScript : MonoBehaviour
 {
+    public Transform rotateCenter; 
+    public Vector3 gravityDirection = new Vector3(0, -1f, 0);
+    public Transform body;
     [Header("移动设置")]
     public float moveSpeed = 5f;           // 移动速度
 
@@ -26,6 +29,8 @@ public class NewBehaviourScript : MonoBehaviour
     {
         HandleMovement();
         HandleMouseLook();
+
+        gravityDirection = -rotateCenter.up;
     }
 
     void HandleMovement()
@@ -34,16 +39,35 @@ public class NewBehaviourScript : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal"); // A/D 键
         float vertical = Input.GetAxis("Vertical");     // W/S 键
 
-        // 计算水平移动方向（忽略垂直旋转，只使用Y轴旋转）
-        // 获取当前Y轴旋转角度
-        float yRotation = transform.eulerAngles.y;
+        // 根据重力方向计算当前的"上"方向
+        Vector3 upDirection = -gravityDirection.normalized;
 
-        // 基于Y轴旋转计算前进和右侧方向（保持在水平面）
-        Vector3 forward = new Vector3(Mathf.Sin(yRotation * Mathf.Deg2Rad), 0, Mathf.Cos(yRotation * Mathf.Deg2Rad));
-        Vector3 right = new Vector3(Mathf.Cos(yRotation * Mathf.Deg2Rad), 0, -Mathf.Sin(yRotation * Mathf.Deg2Rad));
+        // 获取玩家的前进方向（基于当前朝向）
+        Vector3 playerForward = transform.forward;
 
-        // 计算移动方向（只在水平面移动）
-        Vector3 direction = right * horizontal + forward * vertical;
+        // 将玩家的前进方向投影到垂直于重力的平面上
+        Vector3 projectedForward = Vector3.ProjectOnPlane(playerForward, gravityDirection.normalized).normalized;
+
+        // 如果投影后的向量长度为0（即玩家朝向与重力方向平行），使用一个默认方向
+        if (projectedForward.magnitude < 0.1f)
+        {
+            // 找一个与重力方向垂直的向量作为默认前进方向
+            Vector3 tempVector = Vector3.up;
+            if (Vector3.Dot(gravityDirection.normalized, Vector3.up) > 0.9f)
+            {
+                tempVector = Vector3.forward;
+            }
+            projectedForward = Vector3.ProjectOnPlane(tempVector, gravityDirection.normalized).normalized;
+        }
+
+        // 计算右侧方向：使用叉积，确保在垂直于重力的平面上
+        Vector3 rightDirection = Vector3.Cross(upDirection, projectedForward).normalized;
+
+        // 重新计算前进方向，确保三个方向互相垂直
+        Vector3 forwardDirection = Vector3.Cross(rightDirection, upDirection).normalized;
+
+        // 计算最终移动方向
+        Vector3 direction = rightDirection * horizontal + forwardDirection * vertical;
 
         // 应用移动
         transform.position += direction * moveSpeed * Time.deltaTime;
