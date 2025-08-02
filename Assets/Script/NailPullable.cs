@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-using Fragilem17.MirrorsAndPortals; // 确保此命名空间和你的Portal类匹配
+using Fragilem17.MirrorsAndPortals;
 
 public class NailPullable : MonoBehaviour
 {
@@ -28,6 +28,12 @@ public class NailPullable : MonoBehaviour
     [Header("拔出后Portal关联")]
     public Portal portalToSet;             // 拔出后要设置的Portal
     public Portal newOtherPortal;          // 要指定为OtherPortal的Portal
+
+    [Header("字幕功能")]
+    [Tooltip("每根钉子对应的字幕文本")]
+    public string nailSubtitle;
+    [Tooltip("字幕显示时长（秒）")]
+    public float subtitleDuration = 2.5f;
 
     private int currentStep = 0;
     private bool isPulledOut = false;
@@ -79,6 +85,10 @@ public class NailPullable : MonoBehaviour
         if (currentStep >= totalSteps)
         {
             isPulledOut = true;
+
+            // 显示字幕
+            if (!string.IsNullOrEmpty(nailSubtitle) && SubtitleManager.Instance != null)
+                SubtitleManager.Instance.ShowSubtitle(nailSubtitle, subtitleDuration);
 
             // 计数
             if (countAsGoalNail && NailPullManager.Instance != null)

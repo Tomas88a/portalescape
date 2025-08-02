@@ -18,10 +18,13 @@ public class NailPullManager : MonoBehaviour
     public int flashTimes = 4;      // 闪烁次数
     public float flashInterval = 0.18f; // 闪烁间隔时间
 
+    [Header("音效")]
+    public AudioSource audioSource;
+    public AudioClip unlockClip;
+
     private void Awake()
     {
         Instance = this;
-        // 一开始不显示UI
         if (nailCounterText)
             nailCounterText.gameObject.SetActive(false);
     }
@@ -30,13 +33,11 @@ public class NailPullManager : MonoBehaviour
     {
         pulledNails++;
 
-        // 第一次拔出时才显示UI
         if (pulledNails == 1 && nailCounterText)
             nailCounterText.gameObject.SetActive(true);
 
         UpdateUI();
 
-        // 门上长钉子
         if (pulledNails <= doorNailPrefabs.Length && pulledNails <= doorNailSlots.Length)
         {
             Vector3 offset = Vector3.zero;
@@ -54,9 +55,12 @@ public class NailPullManager : MonoBehaviour
 
         if (pulledNails >= totalNails)
         {
+            // 播放解锁音效
+            if (audioSource != null && unlockClip != null)
+                audioSource.PlayOneShot(unlockClip);
+
             if (targetDoor != null)
                 targetDoor.OpenDoor();
-            // UI闪烁再隐藏
             if (nailCounterText)
                 StartCoroutine(FlashAndHideUI());
         }
@@ -68,7 +72,6 @@ public class NailPullManager : MonoBehaviour
             nailCounterText.text = $"Nail{pulledNails}/{totalNails}";
     }
 
-    // 协程：闪烁几下再隐藏
     IEnumerator FlashAndHideUI()
     {
         for (int i = 0; i < flashTimes; i++)
