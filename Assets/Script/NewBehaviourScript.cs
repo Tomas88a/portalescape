@@ -17,6 +17,7 @@ public class NewBehaviourScript : MonoBehaviour
     public float maxLookAngle = 80f;       // 最大仰视角度
 
     private float verticalRotation = 0f;   // 垂直旋转角度
+    public bool canJump = true;
 
     // Start is called before the first frame update
     void Start()
@@ -34,7 +35,7 @@ public class NewBehaviourScript : MonoBehaviour
 
         gravityDirection = -rotateCenter.up;
         body.rotation = rotateCenter.rotation;
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && canJump)
         {
             Debug.LogError("jump");
             Playerbody.AddForce(-gravityDirection * 3.81f, ForceMode.Impulse);
