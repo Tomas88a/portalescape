@@ -788,6 +788,8 @@ MonoBehaviour:
   dropSound: {fileID: 0}
   animator: {fileID: 0}
   insertAnimName: Insert
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 0.08
 --- !u!1001 &40050436
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2490,6 +2492,8 @@ MonoBehaviour:
   dropSound: {fileID: 0}
   animator: {fileID: 0}
   insertAnimName: Insert
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 0.08
 --- !u!1001 &110414147
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2728,6 +2732,8 @@ MonoBehaviour:
   dropSound: {fileID: 0}
   animator: {fileID: 0}
   insertAnimName: Insert
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 0.08
 --- !u!1001 &119550030
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3079,6 +3085,8 @@ MonoBehaviour:
   dropSound: {fileID: 0}
   animator: {fileID: 0}
   insertAnimName: Insert
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 0.08
 --- !u!4 &128011493 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: eb99f6bb4596aba4da079293ddc4defd,
@@ -5713,6 +5721,8 @@ MonoBehaviour:
   dropSound: {fileID: 0}
   animator: {fileID: 0}
   insertAnimName: Insert
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 0.08
 --- !u!4 &272894098 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4631730319309726, guid: 5a2b2aefafe7a2f4bb79271e2b6b2e62,
@@ -6060,6 +6070,8 @@ MonoBehaviour:
   dropSound: {fileID: 0}
   animator: {fileID: 0}
   insertAnimName: Insert
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 0.08
 --- !u!1001 &291665100
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10820,10 +10832,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 569403650}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4760ab8b14bb044aa8d76392b9a7ecc, type: 3}
+  m_Script: {fileID: 11500000, guid: 723bba4d97ccee644b742db056123c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetSpawnPoint: {fileID: 682413194}
+  targetPoint: {fileID: 682413194}
+  targetEulerAngles: {x: 0, y: 0, z: 0}
+  newGravity: {x: 0, y: -9.81, z: 0}
 --- !u!1001 &581908312
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11071,7 +11085,7 @@ Transform:
   m_GameObject: {fileID: 608356912}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 35.92, y: 3.611, z: -0.36}
+  m_LocalPosition: {x: 47.29, y: 0.5, z: 2.6}
   m_LocalScale: {x: 0.54627, y: 0.54627, z: 0.54627}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11121,8 +11135,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0113e91c686af4c8b82fc62507107c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door: {fileID: 0}
   openAngle: 90
   openSpeed: 3
+  openSound: {fileID: 0}
+  closeSound: {fileID: 0}
+  audioSource: {fileID: 0}
 --- !u!65 &609103002
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11917,7 +11935,7 @@ Transform:
   m_GameObject: {fileID: 666153408}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.954, y: 2.85, z: 21.386}
+  m_LocalPosition: {x: -1.888, y: 3.89, z: 21.386}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -17121,6 +17139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   door: {fileID: 1772159744}
+  delayToClose: 1
 --- !u!23 &887263429
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -17734,6 +17753,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   door: {fileID: 609103001}
+  delayToClose: 1
 --- !u!23 &908811112
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -18905,8 +18925,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0113e91c686af4c8b82fc62507107c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door: {fileID: 0}
   openAngle: 90
   openSpeed: 3
+  openSound: {fileID: 0}
+  closeSound: {fileID: 0}
+  audioSource: {fileID: 0}
 --- !u!4 &981437084 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4108251285165204, guid: 1d46b704e2c5bc94b94f4b8528cc395b,
@@ -22741,8 +22765,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0113e91c686af4c8b82fc62507107c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door: {fileID: 0}
   openAngle: 90
   openSpeed: 3
+  openSound: {fileID: 0}
+  closeSound: {fileID: 0}
+  audioSource: {fileID: 0}
 --- !u!4 &1210405802 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4108251285165204, guid: 1d46b704e2c5bc94b94f4b8528cc395b,
@@ -24346,7 +24374,7 @@ GameObject:
   - component: {fileID: 1349601484}
   - component: {fileID: 1349601488}
   - component: {fileID: 1349601487}
-  - component: {fileID: 1349601486}
+  - component: {fileID: 1349601489}
   - component: {fileID: 1349601485}
   m_Layer: 0
   m_Name: Trigger b-B
@@ -24391,19 +24419,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1349601486
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1349601483}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4760ab8b14bb044aa8d76392b9a7ecc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetSpawnPoint: {fileID: 787716283}
 --- !u!23 &1349601487
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -24454,6 +24469,21 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1349601483}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1349601489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1349601483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 723bba4d97ccee644b742db056123c8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetPoint: {fileID: 787716283}
+  targetEulerAngles: {x: 0, y: 0, z: 0}
+  newGravity: {x: 0, y: -9.81, z: 0}
 --- !u!1001 &1352345534
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28927,8 +28957,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0113e91c686af4c8b82fc62507107c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door: {fileID: 0}
   openAngle: 90
   openSpeed: 3
+  openSound: {fileID: 0}
+  closeSound: {fileID: 0}
+  audioSource: {fileID: 0}
 --- !u!4 &1668206321 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4108251285165204, guid: 1d46b704e2c5bc94b94f4b8528cc395b,
@@ -30147,6 +30181,8 @@ MonoBehaviour:
   dropSound: {fileID: 0}
   animator: {fileID: 0}
   insertAnimName: Insert
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 0.08
 --- !u!1001 &1745714332
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30626,8 +30662,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0113e91c686af4c8b82fc62507107c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door: {fileID: 0}
   openAngle: 90
   openSpeed: 3
+  openSound: {fileID: 0}
+  closeSound: {fileID: 0}
+  audioSource: {fileID: 0}
 --- !u!65 &1772159745
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -35763,8 +35803,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0113e91c686af4c8b82fc62507107c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door: {fileID: 0}
   openAngle: 90
   openSpeed: 3
+  openSound: {fileID: 0}
+  closeSound: {fileID: 0}
+  audioSource: {fileID: 0}
 --- !u!1001 &2107535305
 PrefabInstance:
   m_ObjectHideFlags: 0

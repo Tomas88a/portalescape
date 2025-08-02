@@ -2,26 +2,37 @@ using UnityEngine;
 
 public class DoorTrigger : MonoBehaviour
 {
-    public DoorInteraction door; // Inspector手动拖门对象
+    public DoorInteraction door;
+    public float delayToClose = 1.0f; // 延迟关门时间（秒）
 
-    private bool isPlayerNearby = false;
-
-    void Update()
-    {
-        if (isPlayerNearby && Input.GetKeyDown(KeyCode.E))
-        {
-            door.ToggleDoor();
-        }
-    }
+    private bool playerInside = false;
+    private float exitTime = 0f;
 
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
-            isPlayerNearby = true;
+        {
+            playerInside = true;
+            door.OpenDoor();
+            CancelInvoke(nameof(CloseIfStillOutside));
+        }
     }
+
     void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
-            isPlayerNearby = false;
+        {
+            playerInside = false;
+            exitTime = Time.time;
+            Invoke(nameof(CloseIfStillOutside), delayToClose);
+        }
+    }
+
+    void CloseIfStillOutside()
+    {
+        if (!playerInside)
+        {
+            door.CloseDoor();
+        }
     }
 }
