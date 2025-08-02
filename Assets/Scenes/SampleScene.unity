@@ -1959,6 +1959,8 @@ MonoBehaviour:
   dropSound: {fileID: 0}
   animator: {fileID: 0}
   insertAnimName: Insert
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 0.08
 --- !u!65 &229925595
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3687,6 +3689,8 @@ MonoBehaviour:
   dropSound: {fileID: 0}
   animator: {fileID: 0}
   insertAnimName: Insert
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 0.08
 --- !u!1001 &442198950
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4832,8 +4836,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0113e91c686af4c8b82fc62507107c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door: {fileID: 0}
   openAngle: 90
   openSpeed: 3
+  openSound: {fileID: 0}
+  closeSound: {fileID: 0}
+  audioSource: {fileID: 0}
 --- !u!65 &609103002
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6471,7 +6479,7 @@ Transform:
   m_GameObject: {fileID: 887263425}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.039990425, y: -0.799, z: 1.7600002}
+  m_LocalPosition: {x: -0.039990425, y: -0.799, z: 0.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6511,6 +6519,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   door: {fileID: 1772159744}
+  delayToClose: 1
 --- !u!23 &887263429
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6621,7 +6630,7 @@ Transform:
   m_GameObject: {fileID: 908811108}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.03999996, y: -0.799, z: -1.9700001}
+  m_LocalPosition: {x: -0.03999996, y: -0.799, z: -0.63}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6661,6 +6670,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   door: {fileID: 609103001}
+  delayToClose: 1
 --- !u!23 &908811112
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7225,8 +7235,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0113e91c686af4c8b82fc62507107c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door: {fileID: 0}
   openAngle: 90
   openSpeed: 3
+  openSound: {fileID: 0}
+  closeSound: {fileID: 0}
+  audioSource: {fileID: 0}
 --- !u!1001 &983947862
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7774,6 +7788,8 @@ MonoBehaviour:
   dropSound: {fileID: 0}
   animator: {fileID: 0}
   insertAnimName: Insert
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 0.08
 --- !u!1001 &1099044233
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8588,8 +8604,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0113e91c686af4c8b82fc62507107c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door: {fileID: 0}
   openAngle: 90
   openSpeed: 3
+  openSound: {fileID: 0}
+  closeSound: {fileID: 0}
+  audioSource: {fileID: 0}
 --- !u!1001 &1221951834
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10709,8 +10729,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0113e91c686af4c8b82fc62507107c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door: {fileID: 0}
   openAngle: 90
   openSpeed: 3
+  openSound: {fileID: 0}
+  closeSound: {fileID: 0}
+  audioSource: {fileID: 0}
 --- !u!1001 &1673344109
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11346,6 +11370,8 @@ MonoBehaviour:
   dropSound: {fileID: 0}
   animator: {fileID: 0}
   insertAnimName: Insert
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 0.08
 --- !u!1001 &1762944784
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11550,8 +11576,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0113e91c686af4c8b82fc62507107c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door: {fileID: 0}
   openAngle: 90
   openSpeed: 3
+  openSound: {fileID: 0}
+  closeSound: {fileID: 0}
+  audioSource: {fileID: 0}
 --- !u!65 &1772159745
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13365,8 +13395,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0113e91c686af4c8b82fc62507107c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door: {fileID: 0}
   openAngle: 90
   openSpeed: 3
+  openSound: {fileID: 0}
+  closeSound: {fileID: 0}
+  audioSource: {fileID: 0}
 --- !u!1001 &2079573731
 PrefabInstance:
   m_ObjectHideFlags: 0

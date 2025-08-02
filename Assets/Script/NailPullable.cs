@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class NailPullable : MonoBehaviour
 {
@@ -13,23 +14,31 @@ public class NailPullable : MonoBehaviour
     public Collider coll;
 
     [Header("拔出后处理")]
-    public bool destroyOnPull = true;    // 拔出后是否销毁（墙钉用true，桥钉用false）
+    public bool destroyOnPull = true;        // 拔出后是否销毁（墙钉用true，桥钉用false）
     [Header("目标计数钉子（会计数/开门/触发UI）")]
-    public bool countAsGoalNail = true;  // 桥钉设false即可不计数
+    public bool countAsGoalNail = true;      // 桥钉设false即可不计数
 
     [Header("拔出后激活的Trigger（可选）")]
-    public GameObject triggerToActivate;   // ！！！新增：指定拔出后要激活的trigger
+    public GameObject triggerToActivate;     // 拔出后要激活的trigger
 
     [Header("音效&动画")]
-    public AudioClip pullSound;          // 拔出时的音效（每次左键一下）
-    public AudioClip dropSound;          // 钉子掉地时音效
-    public Animator animator;            // 插地时动画
-    public string insertAnimName = "Insert"; // 插地动画名
+    public AudioClip pullSound;
+    public AudioClip dropSound;
+    public Animator animator;
+    public string insertAnimName = "Insert";
+
+    [Header("拔出反馈")]
+    public Color flashColor = Color.white;   // 闪烁颜色
+    public float flashDuration = 0.08f;      // 闪烁时间
 
     private int currentStep = 0;
     private bool isPulledOut = false;
     private AudioSource audioSource;
     private bool dropSoundPlayed = false;
+
+    // 用于闪烁效果
+    private Renderer[] allRenderers;
+    private Color[][] originalColors;
 
     void Start()
     {
@@ -38,6 +47,17 @@ public class NailPullable : MonoBehaviour
         if (rb != null) rb.isKinematic = true;
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null) audioSource = gameObject.AddComponent<AudioSource>();
+
+        // 闪烁相关初始化
+        allRenderers = GetComponentsInChildren<Renderer>();
+        originalColors = new Color[allRenderers.Length][];
+        for (int i = 0; i < allRenderers.Length; i++)
+        {
+            var mats = allRenderers[i].materials;
+            originalColors[i] = new Color[mats.Length];
+            for (int j = 0; j < mats.Length; j++)
+                originalColors[i][j] = mats[j].color;
+        }
     }
 
     public void PullOnce()
@@ -52,16 +72,17 @@ public class NailPullable : MonoBehaviour
         if (pullSound)
             audioSource.PlayOneShot(pullSound);
 
+        // 拔出一段就闪烁
+        StartCoroutine(FlashEffect());
+
         if (currentStep >= totalSteps)
         {
             isPulledOut = true;
             if (rb != null) rb.isKinematic = false;
 
-            // 只统计目标钉子
             if (countAsGoalNail && NailPullManager.Instance != null)
                 NailPullManager.Instance.AddNail();
 
-            // ！！！拔出后激活Trigger
             if (triggerToActivate != null)
             {
                 triggerToActivate.SetActive(true);
@@ -72,11 +93,33 @@ public class NailPullable : MonoBehaviour
             {
                 Destroy(gameObject, 0.5f); // 半秒后销毁
             }
-            // 否则等掉落脚本/FallingNail去处理
         }
     }
 
-    // 新增钉子掉落到地面时的音效和插地动画（给桥钉用，destroyOnPull=false时会启用）
+    private IEnumerator FlashEffect()
+    {
+        // 1. 闪烁变色
+        for (int i = 0; i < allRenderers.Length; i++)
+        {
+            var mats = allRenderers[i].materials;
+            for (int j = 0; j < mats.Length; j++)
+            {
+                mats[j].color = flashColor;
+            }
+        }
+        yield return new WaitForSeconds(flashDuration);
+        // 2. 恢复原色
+        for (int i = 0; i < allRenderers.Length; i++)
+        {
+            var mats = allRenderers[i].materials;
+            for (int j = 0; j < mats.Length; j++)
+            {
+                mats[j].color = originalColors[i][j];
+            }
+        }
+    }
+
+    // 钉子掉落到地面时的音效和插地动画
     void OnCollisionEnter(Collision collision)
     {
         if (isPulledOut && !destroyOnPull && !dropSoundPlayed)
