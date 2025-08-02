@@ -33,7 +33,7 @@ public class NewBehaviourScript : MonoBehaviour
         HandleMouseLook();
 
         gravityDirection = -rotateCenter.up;
-        body.rotation = rotateCenter.rotation; 
+        body.rotation = rotateCenter.rotation;
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.LogError("jump");

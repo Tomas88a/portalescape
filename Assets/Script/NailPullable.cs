@@ -1,54 +1,49 @@
 using UnityEngine;
 using System.Collections;
+using Fragilem17.MirrorsAndPortals; // 确保此命名空间和你的Portal类匹配
 
 public class NailPullable : MonoBehaviour
 {
     [Header("拔出参数")]
     public Vector3 pullDirection = Vector3.forward;
-    public float pullStep = 0.05f;
-    public int totalSteps = 10;
-    public float rotateStep = 10f;
-
-    [Header("掉落参数")]
-    public Rigidbody rb;
-    public Collider coll;
-
-    [Header("拔出后处理")]
-    public bool destroyOnPull = true;        // 拔出后是否销毁（墙钉用true，桥钉用false）
-    [Header("目标计数钉子（会计数/开门/触发UI）")]
-    public bool countAsGoalNail = true;      // 桥钉设false即可不计数
-
-    [Header("拔出后激活的Trigger（可选）")]
-    public GameObject triggerToActivate;     // 拔出后要激活的trigger
-
-    [Header("音效&动画")]
-    public AudioClip pullSound;
-    public AudioClip dropSound;
-    public Animator animator;
-    public string insertAnimName = "Insert";
+    public float pullStep = 0.05f;         // 每次拔出一小段
+    public int totalSteps = 5;             // 总共能拔几次（到头后掉落/消失）
+    public float rotateStep = 10f;         // 每次旋转角度
 
     [Header("拔出反馈")]
-    public Color flashColor = Color.white;   // 闪烁颜色
-    public float flashDuration = 0.08f;      // 闪烁时间
+    public Color flashColor = Color.white;
+    public float flashDuration = 0.08f;
+    public AudioClip pullSound;
+    public AudioSource audioSource;
+    public Animator animator;
+    public string pullAnimName = "Pull";
+    public bool destroyOnPull = true;      // 拔出后是否销毁（掉落钉子可设为false）
+
+    [Header("作为解谜计数目标")]
+    public bool countAsGoalNail = false;   // 是否参与NailPullManager计数
+
+    [Header("拔出后激活Trigger")]
+    public GameObject triggerToActivate;   // 拔出后激活指定trigger
+
+    [Header("拔出后Portal关联")]
+    public Portal portalToSet;             // 拔出后要设置的Portal
+    public Portal newOtherPortal;          // 要指定为OtherPortal的Portal
 
     private int currentStep = 0;
     private bool isPulledOut = false;
-    private AudioSource audioSource;
-    private bool dropSoundPlayed = false;
-
-    // 用于闪烁效果
+    private Rigidbody rb;
     private Renderer[] allRenderers;
     private Color[][] originalColors;
 
     void Start()
     {
-        if (rb == null) rb = GetComponent<Rigidbody>();
-        if (coll == null) coll = GetComponent<Collider>();
-        if (rb != null) rb.isKinematic = true;
         audioSource = GetComponent<AudioSource>();
-        if (audioSource == null) audioSource = gameObject.AddComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
 
-        // 闪烁相关初始化
+        rb = GetComponent<Rigidbody>();
+        if (rb != null) rb.isKinematic = true;
+
         allRenderers = GetComponentsInChildren<Renderer>();
         originalColors = new Color[allRenderers.Length][];
         for (int i = 0; i < allRenderers.Length; i++)
@@ -64,80 +59,68 @@ public class NailPullable : MonoBehaviour
     {
         if (isPulledOut) return;
 
+        // 每次往外拉一点
         transform.position += pullDirection.normalized * pullStep;
         transform.Rotate(Vector3.forward, rotateStep, Space.Self);
         currentStep++;
 
-        // 拔出音效
+        // 音效
         if (pullSound)
             audioSource.PlayOneShot(pullSound);
 
-        // 拔出一段就闪烁
+        // 闪烁反馈
         StartCoroutine(FlashEffect());
 
+        // 动画
+        if (animator && !string.IsNullOrEmpty(pullAnimName))
+            animator.Play(pullAnimName);
+
+        // 拔到头
         if (currentStep >= totalSteps)
         {
             isPulledOut = true;
-            if (rb != null) rb.isKinematic = false;
 
+            // 计数
             if (countAsGoalNail && NailPullManager.Instance != null)
                 NailPullManager.Instance.AddNail();
 
+            // 激活trigger
             if (triggerToActivate != null)
             {
                 triggerToActivate.SetActive(true);
                 Debug.Log("拔出钉子后已激活Trigger: " + triggerToActivate.name);
             }
 
-            if (destroyOnPull)
+            // 设置Portal的OtherPortal
+            if (portalToSet != null && newOtherPortal != null)
             {
-                Destroy(gameObject, 0.5f); // 半秒后销毁
+                portalToSet.OtherPortal = newOtherPortal;
+                Debug.Log("已设置Portal: " + portalToSet.name + " 的OtherPortal为: " + newOtherPortal.name);
             }
+
+            // 允许掉落
+            if (rb != null) rb.isKinematic = false;
+
+            // 销毁
+            if (destroyOnPull)
+                Destroy(gameObject, 0.5f);
         }
     }
 
     private IEnumerator FlashEffect()
     {
-        // 1. 闪烁变色
         for (int i = 0; i < allRenderers.Length; i++)
         {
             var mats = allRenderers[i].materials;
             for (int j = 0; j < mats.Length; j++)
-            {
                 mats[j].color = flashColor;
-            }
         }
         yield return new WaitForSeconds(flashDuration);
-        // 2. 恢复原色
         for (int i = 0; i < allRenderers.Length; i++)
         {
             var mats = allRenderers[i].materials;
             for (int j = 0; j < mats.Length; j++)
-            {
                 mats[j].color = originalColors[i][j];
-            }
-        }
-    }
-
-    // 钉子掉落到地面时的音效和插地动画
-    void OnCollisionEnter(Collision collision)
-    {
-        if (isPulledOut && !destroyOnPull && !dropSoundPlayed)
-        {
-            if (collision.gameObject.CompareTag("Ground") || collision.contacts[0].normal == Vector3.up)
-            {
-                if (dropSound)
-                    audioSource.PlayOneShot(dropSound);
-
-                dropSoundPlayed = true;
-
-                if (animator && !string.IsNullOrEmpty(insertAnimName))
-                {
-                    animator.Play(insertAnimName);
-                }
-
-                if (rb != null) rb.isKinematic = true;
-            }
         }
     }
 }
