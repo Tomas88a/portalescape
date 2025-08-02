@@ -31,6 +31,7 @@ public class NewBehaviourScript : MonoBehaviour
         HandleMouseLook();
 
         gravityDirection = -rotateCenter.up;
+        body.rotation = rotateCenter.rotation;
     }
 
     void HandleMovement()
