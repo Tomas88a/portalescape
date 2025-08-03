@@ -27,16 +27,24 @@ public class NewBehaviourScript : MonoBehaviour
     private bool isWalking = false;
     private float verticalRotation = 0f;
     public bool canJump = true;
+    private bool isCursorLocked = true;  // 鼠标锁定状态
 
     void Start()
     {
-        // 锁定鼠标到屏幕中心并隐藏光标
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        // 初始状态：锁定鼠标到屏幕中心并隐藏光标
+        SetCursorState(true);
     }
 
     void Update()
     {
+        // ESC键切换鼠标显示/隐藏状态
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            isCursorLocked = !isCursorLocked;
+            SetCursorState(isCursorLocked);
+            Debug.Log("ESC pressed - Cursor locked: " + isCursorLocked);
+        }
+
         HandleMovement();
         HandleMouseLook();
 
@@ -118,6 +126,9 @@ public class NewBehaviourScript : MonoBehaviour
 
     void HandleMouseLook()
     {
+        // 只有在鼠标锁定状态下才处理鼠标输入
+        if (!isCursorLocked) return;
+
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
@@ -127,5 +138,23 @@ public class NewBehaviourScript : MonoBehaviour
         verticalRotation = Mathf.Clamp(verticalRotation, -maxLookAngle, maxLookAngle);
 
         transform.localRotation = Quaternion.Euler(verticalRotation, transform.localEulerAngles.y, 0f);
+    }
+
+    void SetCursorState(bool locked)
+    {
+        if (locked)
+        {
+            // 锁定鼠标到屏幕中心并隐藏光标
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            Debug.Log("鼠标已隐藏并锁定");
+        }
+        else
+        {
+            // 解锁鼠标并显示光标
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            Debug.Log("鼠标已显示并解锁");
+        }
     }
 }
