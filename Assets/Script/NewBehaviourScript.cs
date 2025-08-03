@@ -26,7 +26,6 @@ public class NewBehaviourScript : MonoBehaviour
 
     private bool isWalking = false;
     private float verticalRotation = 0f;
-    [HideInInspector]
     public bool canJump = true;
 
     void Start()

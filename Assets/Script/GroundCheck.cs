@@ -5,13 +5,13 @@ using UnityEngine;
 public class GroundCheck : MonoBehaviour
 {
     public NewBehaviourScript player;
-    public AudioClip landClip; // ÂäµØÒôĞ§ÍÏÕâÀï£¡
+    public AudioClip landClip; // ï¿½ï¿½ï¿½ï¿½ï¿½Ğ§ï¿½ï¿½ï¿½ï¿½ï¿½ï£¡
 
     private bool wasOnGround = false;
 
     private void Start()
     {
-        player = transform.parent.GetComponent<NewBehaviourScript>();
+        // player = transform.parent.GetComponent<NewBehaviourScript>();
         if (player != null)
         {
             player.landClip = landClip;
@@ -24,7 +24,7 @@ public class GroundCheck : MonoBehaviour
         {
             player.canJump = true;
 
-            // ÂäµØÊ±²¥·ÅÂäµØÒôĞ§
+            // ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ§
             if (player.audioSource != null && landClip != null)
             {
                 player.audioSource.PlayOneShot(landClip, 1f);
