@@ -93,7 +93,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 733525469851873395}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 8b2597463d9c9c64eb590ccd2b4e42ee, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -262,6 +262,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 4639686796641871863}
   landClip: {fileID: 0}
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  checkRadius: 0.5
 --- !u!54 &958479054426518367
 Rigidbody:
   m_ObjectHideFlags: 0

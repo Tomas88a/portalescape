@@ -4,35 +4,35 @@ using Fragilem17.MirrorsAndPortals;
 
 public class NailPullable : MonoBehaviour
 {
-    [Header("°Î³ö²ÎÊý")]
+    [Header("ï¿½Î³ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public Vector3 pullDirection = Vector3.forward;
-    public float pullStep = 0.05f;         // Ã¿´Î°Î³öÒ»Ð¡¶Î
-    public int totalSteps = 5;             // ×Ü¹²ÄÜ°Î¼¸´Î£¨µ½Í·ºóµôÂä/ÏûÊ§£©
-    public float rotateStep = 10f;         // Ã¿´ÎÐý×ª½Ç¶È
+    public float pullStep = 0.05f;         // Ã¿ï¿½Î°Î³ï¿½Ò»Ð¡ï¿½ï¿½
+    public int totalSteps = 5;             // ï¿½Ü¹ï¿½ï¿½Ü°Î¼ï¿½ï¿½Î£ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½Ê§ï¿½ï¿½
+    public float rotateStep = 10f;         // Ã¿ï¿½ï¿½ï¿½ï¿½×ªï¿½Ç¶ï¿½
 
-    [Header("°Î³ö·´À¡")]
+    [Header("ï¿½Î³ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public Color flashColor = Color.white;
     public float flashDuration = 0.08f;
     public AudioClip pullSound;
     public AudioSource audioSource;
     public Animator animator;
     public string pullAnimName = "Pull";
-    public bool destroyOnPull = true;      // °Î³öºóÊÇ·ñÏú»Ù£¨µôÂä¶¤×Ó¿ÉÉèÎªfalse£©
+    public bool destroyOnPull = true;      // ï¿½Î³ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½Ù£ï¿½ï¿½ï¿½ï¿½ä¶¤ï¿½Ó¿ï¿½ï¿½ï¿½Îªfalseï¿½ï¿½
 
-    [Header("×÷Îª½âÃÕ¼ÆÊýÄ¿±ê")]
-    public bool countAsGoalNail = false;   // ÊÇ·ñ²ÎÓëNailPullManager¼ÆÊý
+    [Header("ï¿½ï¿½Îªï¿½ï¿½ï¿½Õ¼ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½")]
+    public bool countAsGoalNail = false;   // ï¿½Ç·ï¿½ï¿½ï¿½ï¿½NailPullManagerï¿½ï¿½ï¿½ï¿½
 
-    [Header("°Î³öºó¼¤»îTrigger")]
-    public GameObject triggerToActivate;   // °Î³öºó¼¤»îÖ¸¶¨trigger
+    [Header("ï¿½Î³ï¿½ï¿½ó¼¤»ï¿½Trigger")]
+    public GameObject triggerToActivate;   // ï¿½Î³ï¿½ï¿½ó¼¤»ï¿½Ö¸ï¿½ï¿½trigger
 
-    [Header("°Î³öºóPortal¹ØÁª")]
-    public Portal portalToSet;             // °Î³öºóÒªÉèÖÃµÄPortal
-    public Portal newOtherPortal;          // ÒªÖ¸¶¨ÎªOtherPortalµÄPortal
+    [Header("ï¿½Î³ï¿½ï¿½ï¿½Portalï¿½ï¿½ï¿½ï¿½")]
+    public Portal portalToSet;             // ï¿½Î³ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Ãµï¿½Portal
+    public Portal newOtherPortal;          // ÒªÖ¸ï¿½ï¿½ÎªOtherPortalï¿½ï¿½Portal
 
-    [Header("×ÖÄ»¹¦ÄÜ")]
-    [Tooltip("Ã¿¸ù¶¤×Ó¶ÔÓ¦µÄ×ÖÄ»ÎÄ±¾")]
+    [Header("ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½")]
+    [Tooltip("Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½Ó¶ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½Ä»ï¿½Ä±ï¿½")]
     public string nailSubtitle;
-    [Tooltip("×ÖÄ»ÏÔÊ¾Ê±³¤£¨Ãë£©")]
+    [Tooltip("ï¿½ï¿½Ä»ï¿½ï¿½Ê¾Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ë£©")]
     public float subtitleDuration = 2.5f;
 
     private int currentStep = 0;
@@ -65,53 +65,53 @@ public class NailPullable : MonoBehaviour
     {
         if (isPulledOut) return;
 
-        // Ã¿´ÎÍùÍâÀ­Ò»µã
+        // Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
         transform.position += pullDirection.normalized * pullStep;
         transform.Rotate(Vector3.forward, rotateStep, Space.Self);
         currentStep++;
 
-        // ÒôÐ§
+        // ï¿½ï¿½Ð§
         if (pullSound)
             audioSource.PlayOneShot(pullSound);
 
-        // ÉÁË¸·´À¡
+        // ï¿½ï¿½Ë¸ï¿½ï¿½ï¿½ï¿½
         StartCoroutine(FlashEffect());
 
-        // ¶¯»­
+        // ï¿½ï¿½ï¿½ï¿½
         if (animator && !string.IsNullOrEmpty(pullAnimName))
             animator.Play(pullAnimName);
 
-        // °Îµ½Í·
+        // ï¿½Îµï¿½Í·
         if (currentStep >= totalSteps)
         {
             isPulledOut = true;
 
-            // ÏÔÊ¾×ÖÄ»
+            // ï¿½ï¿½Ê¾ï¿½ï¿½Ä»
             if (!string.IsNullOrEmpty(nailSubtitle) && SubtitleManager.Instance != null)
                 SubtitleManager.Instance.ShowSubtitle(nailSubtitle, subtitleDuration);
 
-            // ¼ÆÊý
+            // ï¿½ï¿½ï¿½ï¿½
             if (countAsGoalNail && NailPullManager.Instance != null)
                 NailPullManager.Instance.AddNail();
 
-            // ¼¤»îtrigger
+            // ï¿½ï¿½ï¿½ï¿½trigger
             if (triggerToActivate != null)
             {
                 triggerToActivate.SetActive(true);
-                Debug.Log("°Î³ö¶¤×ÓºóÒÑ¼¤»îTrigger: " + triggerToActivate.name);
+                Debug.Log("ï¿½Î³ï¿½ï¿½ï¿½ï¿½Óºï¿½ï¿½Ñ¼ï¿½ï¿½ï¿½Trigger: " + triggerToActivate.name);
             }
 
-            // ÉèÖÃPortalµÄOtherPortal
+            // ï¿½ï¿½ï¿½ï¿½Portalï¿½ï¿½OtherPortal
             if (portalToSet != null && newOtherPortal != null)
             {
                 portalToSet.OtherPortal = newOtherPortal;
-                Debug.Log("ÒÑÉèÖÃPortal: " + portalToSet.name + " µÄOtherPortalÎª: " + newOtherPortal.name);
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Portal: " + portalToSet.name + " ï¿½ï¿½OtherPortalÎª: " + newOtherPortal.name);
             }
 
-            // ÔÊÐíµôÂä
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (rb != null) rb.isKinematic = false;
 
-            // Ïú»Ù
+            // ï¿½ï¿½ï¿½ï¿½
             if (destroyOnPull)
                 Destroy(gameObject, 0.5f);
         }
@@ -132,5 +132,27 @@ public class NailPullable : MonoBehaviour
             for (int j = 0; j < mats.Length; j++)
                 mats[j].color = originalColors[i][j];
         }
+    }
+
+    [ContextMenu("PullOnce_ContextMenu")]
+    public void PullOnce_ContextMenu()
+    {
+        PullOnce(); 
+        PullOnce(); 
+        PullOnce(); 
+        PullOnce(); 
+        PullOnce(); 
+        PullOnce(); 
+        PullOnce(); 
+        PullOnce(); 
+        
+        PullOnce(); 
+        PullOnce(); 
+        PullOnce(); 
+        PullOnce(); 
+        PullOnce(); 
+        PullOnce(); 
+        PullOnce(); 
+        PullOnce(); 
     }
 }
