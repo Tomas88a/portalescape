@@ -29,20 +29,22 @@ public class NewBehaviourScript : MonoBehaviour
     public bool canJump = true;
     private bool isCursorLocked = true;  // 鼠标锁定状态
 
+    public GameObject pauseUI;
+
     void Start()
     {
-        // 初始状态：锁定鼠标到屏幕中心并隐藏光标
-        SetCursorState(true);
+        // 初始状态：锁定鼠标到屏幕中心并隐藏光标，隐藏UI
+        SetCursorAndUIState(true);
     }
 
     void Update()
     {
-        // ESC键切换鼠标显示/隐藏状态
+        // ESC键切换鼠标和UI显示/隐藏状态
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             isCursorLocked = !isCursorLocked;
-            SetCursorState(isCursorLocked);
-            Debug.Log("ESC pressed - Cursor locked: " + isCursorLocked);
+            SetCursorAndUIState(isCursorLocked);
+            Debug.Log("ESC pressed - Cursor locked: " + isCursorLocked + ", UI hidden: " + isCursorLocked);
         }
 
         HandleMovement();
@@ -140,21 +142,33 @@ public class NewBehaviourScript : MonoBehaviour
         transform.localRotation = Quaternion.Euler(verticalRotation, transform.localEulerAngles.y, 0f);
     }
 
-    void SetCursorState(bool locked)
+    void SetCursorAndUIState(bool locked)
     {
         if (locked)
         {
-            // 锁定鼠标到屏幕中心并隐藏光标
+            // 锁定鼠标到屏幕中心并隐藏光标，隐藏UI
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            Debug.Log("鼠标已隐藏并锁定");
+            if (pauseUI != null)
+                pauseUI.SetActive(false);
+            Debug.Log("鼠标已隐藏并锁定，UI已隐藏");
         }
         else
         {
-            // 解锁鼠标并显示光标
+            // 解锁鼠标并显示光标，显示UI
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            Debug.Log("鼠标已显示并解锁");
+            if (pauseUI != null)
+                pauseUI.SetActive(true);
+            Debug.Log("鼠标已显示并解锁，UI已显示");
         }
+    }
+
+    // 公共方法：切换暂停状态（供PauseUI调用）
+    public void TogglePauseState()
+    {
+        isCursorLocked = !isCursorLocked;
+        SetCursorAndUIState(isCursorLocked);
+        Debug.Log("TogglePauseState called - Cursor locked: " + isCursorLocked + ", UI hidden: " + isCursorLocked);
     }
 }
