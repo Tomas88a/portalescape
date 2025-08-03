@@ -2,14 +2,15 @@ using UnityEngine;
 
 public class NailHighlightOnProximity : MonoBehaviour
 {
-    public float highlightDistance = 2.2f;          // ÓëÍæ¼Ò½»»¥¾àÀë
-    public Color highlightColor = Color.yellow;     // ¸ßÁÁÑÕÉ«
-    public bool useEmission = false;                // ¿ÉÑ¡£ºÊÇ·ñÓÃEmission¸ßÁÁ
+    public float highlightDistance = 2.2f;          // ï¿½ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public Color highlightColor = Color.yellow;     // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«
+    public bool useEmission = false;                // ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Emissionï¿½ï¿½ï¿½ï¿½
     public float emissionIntensity = 1.8f;
 
     private Renderer[] renderers;
     private Color[][] originalColors;
     private bool isHighlighted = false;
+    private NailPullable nailPullable;              // é’‰å­æ‹”å–ç»„ä»¶å¼•ç”¨
 
     private void Start()
     {
@@ -22,6 +23,9 @@ public class NailHighlightOnProximity : MonoBehaviour
             for (int j = 0; j < mats.Length; j++)
                 originalColors[i][j] = mats[j].color;
         }
+
+        // è·å–åŒä¸€ç‰©ä½“ä¸Šçš„NailPullableç»„ä»¶
+        nailPullable = GetComponent<NailPullable>();
     }
 
     void Update()
@@ -39,6 +43,15 @@ public class NailHighlightOnProximity : MonoBehaviour
         {
             if (isHighlighted)
                 SetHighlight(false);
+        }
+
+        // å½“é’‰å­å¤„äºé«˜äº®çŠ¶æ€æ—¶ï¼Œç›‘å¬é¼ æ ‡å·¦é”®ç‚¹å‡»
+        if (isHighlighted && Input.GetMouseButtonDown(0))
+        {
+            if (nailPullable != null)
+            {
+                nailPullable.PullOnce();
+            }
         }
     }
 

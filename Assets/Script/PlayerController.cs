@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     [Header("Hand")]
     public Transform handTransform;
 
-    [Header("³õÊ¼ÖØÁ¦&³¯Ïò")]
+    [Header("ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½&ï¿½ï¿½ï¿½ï¿½")]
     public Vector3 initialGravity = new Vector3(0, -9.81f, 0);
     public Vector3 initialEulerAngles = Vector3.zero;
 
@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
 
         customGravity = initialGravity;
 
-        // Ö»¸ÄplayerË®Æ½·½Ïò£¨yÖá£©Å·À­½Ç
+        // Ö»ï¿½ï¿½playerË®Æ½ï¿½ï¿½ï¿½ï¿½yï¿½á£©Å·ï¿½ï¿½ï¿½ï¿½
         transform.eulerAngles = new Vector3(0, initialEulerAngles.y, 0);
         xRotation = initialEulerAngles.x;
         cameraRollOffset = initialEulerAngles.z;
@@ -57,17 +57,17 @@ public class PlayerController : MonoBehaviour
         HandleInteraction();
     }
 
-    // ¡ï¡ï¡ï ¹Ø¼ü²¿·Ö£º×ÔÊÊÓ¦ÖØÁ¦µÄÊó±êLook ¡ï¡ï¡ï
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½Ø¼ï¿½ï¿½ï¿½ï¿½Ö£ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Look ï¿½ï¿½ï¿½ï¿½
     void HandleMouseLook()
     {
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
-        // Ë®Æ½Ðý×ª
+        // Ë®Æ½ï¿½ï¿½×ª
         Vector3 upAxis = -customGravity.normalized;
         transform.Rotate(upAxis, mouseX, Space.World);
 
-        // ´¹Ö±pitch
+        // ï¿½ï¿½Ö±pitch
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
@@ -133,24 +133,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleInteraction()
     {
-        // Êó±ê×ó¼ü°Î¶¤×Ó
-        if (Input.GetMouseButtonDown(0))
-        {
-            float pullDistance = 2f;
-            Ray ray = mainCam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, pullDistance))
-            {
-                var nail = hit.collider.GetComponent<NailPullable>();
-                if (nail != null)
-                {
-                    nail.PullOnce();
-                    return;
-                }
-            }
-        }
-
-        // E¼üÊ°È¡/·ÅÏÂÎïÌå
+        // Eï¿½ï¿½Ê°È¡/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (heldPickable != null)
