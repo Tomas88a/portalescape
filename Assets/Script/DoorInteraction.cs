@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class DoorInteraction : MonoBehaviour
 {
-    [Header("ÃÅ¶¯»­²ÎÊý")]
-    public Transform door; // ÄãµÄÃÅÌå£¨Ðý×ª¶ÔÏó£©
+    [Header("ï¿½Å¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
+    public Transform door; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½å£¨ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½
     public float openAngle = 90f;
     public float openSpeed = 2f;
 
-    [Header("ÃÅÐý×ªÉèÖÃ")]
-    public Vector3 openAxis = Vector3.up;   // Ðý×ªÖá£¨Ä¬ÈÏYÖá£¬Ç½ÃÅ¿ÉÉèÖÃÎªVector3.rightµÈ£©
-    public bool useWorldAxis = false;       // ÊÇ·ñÓÃÊÀ½çÖá
-    public float closedAngle = 0f;          // ¹ØÃÅ½Ç¶È
+    [Header("ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½")]
+    public Vector3 openAxis = Vector3.up;   // ï¿½ï¿½×ªï¿½á£¨Ä¬ï¿½ï¿½Yï¿½á£¬Ç½ï¿½Å¿ï¿½ï¿½ï¿½ï¿½ï¿½ÎªVector3.rightï¿½È£ï¿½
+    public bool useWorldAxis = false;       // ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public float closedAngle = 0f;          // ï¿½ï¿½ï¿½Å½Ç¶ï¿½
 
-    [Header("ÃÅÒôÐ§")]
+    [Header("ï¿½ï¿½ï¿½ï¿½Ð§")]
     public AudioClip openSound;
     public AudioClip closeSound;
     public AudioSource audioSource;
@@ -36,7 +36,7 @@ public class DoorInteraction : MonoBehaviour
     {
         currentAngle = Mathf.LerpAngle(currentAngle, targetAngle, Time.deltaTime * openSpeed);
 
-        // ¸ù¾ÝÖ¸¶¨ÖáÐý×ª
+        // ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ª
         Quaternion targetRot = useWorldAxis ?
             Quaternion.AngleAxis(currentAngle, openAxis) * initialRotation
             : Quaternion.AngleAxis(currentAngle, door.TransformDirection(openAxis)) * initialRotation;
@@ -44,6 +44,8 @@ public class DoorInteraction : MonoBehaviour
         door.localRotation = Quaternion.Lerp(door.localRotation, targetRot, Time.deltaTime * openSpeed);
     }
 
+
+    [ContextMenu("OpenDoor")]
     public void OpenDoor()
     {
         if (!isOpen)
@@ -55,6 +57,7 @@ public class DoorInteraction : MonoBehaviour
         }
     }
 
+    [ContextMenu("CloseDoor")]
     public void CloseDoor()
     {
         if (isOpen)
