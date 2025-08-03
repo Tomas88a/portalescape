@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 7087154855884241912}
   - component: {fileID: 6383428940453025662}
   - component: {fileID: 6612744203894274730}
-  - component: {fileID: 9059970959655538713}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Player
@@ -142,29 +141,6 @@ MonoBehaviour:
   RigidbodiesToPortal: []
   childCloneRenderers: []
   ClonePositionToClosestPortal: {fileID: 0}
---- !u!136 &9059970959655538713
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 733525469851873395}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2643416774215348992
 GameObject:
   m_ObjectHideFlags: 0
