@@ -18,6 +18,9 @@ namespace Fragilem17.MirrorsAndPortals
         [FormerlySerializedAs("AllowTransporting")]
         public bool PortallingEnabled = true;
 
+        [Tooltip("When true, the object's scale will be adjusted based on the portal's scale when passing through. Set to false to disable player size scaling.")]
+        public bool EnableScaleAdjustment = false;
+
         [Space(10)] // 10 pixels of spacing here.
 
         [Header("Events")]
@@ -376,13 +379,16 @@ namespace Fragilem17.MirrorsAndPortals
             var inTransform = fromPortal.PortalSurface.transform;
             var outTransform = fromPortal.OtherPortal.PortalSurface.transform;
 
-            // van scale p1.0 to p0.5 = player 0.5 = portal out / portal in 
-            // van scale p0.5 to p1.0 = player 2 = portal out / portal in 
+            // van scale p1.0 to p0.5 = player 0.5 = portal out / portal in
+            // van scale p0.5 to p1.0 = player 2 = portal out / portal in
             float scaleFactor = (fromPortal.OtherPortal.transform.lossyScale.x / fromPortal.transform.lossyScale.x);
 
-
-            Vector3 originalScaleBeforeWarp = TransformToPortal.localScale;
-            TransformToPortal.localScale = TransformToPortal.localScale * scaleFactor;
+            // Apply scale adjustment only if enabled
+            if (EnableScaleAdjustment)
+            {
+                Vector3 originalScaleBeforeWarp = TransformToPortal.localScale;
+                TransformToPortal.localScale = TransformToPortal.localScale * scaleFactor;
+            }
 
 
             // Position the camera behind the other portal.
