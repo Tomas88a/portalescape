@@ -109,7 +109,11 @@ public class NewBehaviourScript : MonoBehaviour
         Vector3 forwardDirection = Vector3.Cross(rightDirection, upDirection).normalized;
         Vector3 direction = rightDirection * horizontal + forwardDirection * vertical;
 
-        transform.position += direction * moveSpeed * Time.deltaTime;
+        // 使用刚体速度进行移动，保持垂直方向的速度不变
+        Vector3 currentVelocity = Playerbody.velocity;
+        Vector3 verticalVelocity = Vector3.Project(currentVelocity, gravityDirection.normalized);
+        Vector3 newHorizontalVelocity = direction * moveSpeed;
+        Playerbody.velocity = newHorizontalVelocity + verticalVelocity;
     }
 
     void HandleMouseLook()
