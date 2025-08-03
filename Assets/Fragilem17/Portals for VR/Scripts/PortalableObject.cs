@@ -19,7 +19,7 @@ namespace Fragilem17.MirrorsAndPortals
         public bool PortallingEnabled = true;
 
         [Tooltip("When true, the object's scale will be adjusted based on the portal's scale when passing through. Set to false to disable player size scaling.")]
-        public bool EnableScaleAdjustment = false;
+        public bool EnableScaleAdjustment = true;
 
         [Space(10)] // 10 pixels of spacing here.
 
