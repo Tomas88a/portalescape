@@ -451,7 +451,7 @@ GameObject:
   - component: {fileID: 5605654419022877210}
   m_Layer: 0
   m_Name: PlayerHead
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -569,6 +569,7 @@ MonoBehaviour:
   jumpClip: {fileID: 8300000, guid: 55e65331f4baa814f854443e65767de6, type: 3}
   landClip: {fileID: 0}
   canJump: 1
+  pauseUI: {fileID: 0}
 --- !u!114 &8978917023082378919
 MonoBehaviour:
   m_ObjectHideFlags: 0
