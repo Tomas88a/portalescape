@@ -15,6 +15,7 @@ Material:
   - BACK_SOLID_ON
   - FRONT_SOLID_ON
   - LEFT_SOLID_ON
+  - LIGHTMAP_COLR_ON
   - RIGHT_SOLID_ON
   m_InvalidKeywords:
   - COLR_1_2
